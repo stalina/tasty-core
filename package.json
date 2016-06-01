@@ -1,0 +1,19 @@
+{
+  "name": "tasty-core",
+  "version": "0.0.1",
+  "description": "core of the tasty test framework : test made Natural",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stalina/tasty-core.git"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/stalina/tasty-core/issues"
+  },
+  "homepage": "https://github.com/stalina/tasty-core#readme",
+  "devDependencies": {
+    "npm": "^3.9.0",
+    "gulp": "^3.9.1",
+    "gulp-jasmine": "^2.3.0"
+  }
+}

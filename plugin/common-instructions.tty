@@ -1,0 +1,14 @@
+go to $url *{
+    driver.get($url);
+}*
+
+click on $name *{
+    driver.findElement(By.name($name)).click();
+}*
+
+verify that $name is $value *{
+    var element = driver.findElement(By.name($name));
+    element.getText().then(function(text) {
+        expect(text).toBe($value);
+    });
+}*
