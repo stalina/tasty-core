@@ -7,7 +7,7 @@ describe("Tasty Engine", function() {
     });
 
     it("verify eval go to the url", function() {
-        var driver = tasty.getDriver();
+        //var driver = tasty.getDriver();
         //spyOn(driver, "get");
     });
 });

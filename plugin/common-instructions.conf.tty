@@ -7,8 +7,8 @@ click on $name *{
 }*
 
 verify that $name is $value *{
-    var element = driver.findElement(By.name($name));
+    var element = driver.findElement(By.css('.'+$name));
     element.getText().then(function(text) {
-        expect(text).toBe($value);
+        assert.equal(text, $value, 'the '+ $name + ' element contains '+text);
     });
 }*

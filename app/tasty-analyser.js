@@ -24,7 +24,9 @@ exports.addPluginFile=function(filePath, callback){
       }else {
         tastyCode = _extractTastyCode(data.split('\n'));
       }
-      callback();
+      if(callback){
+        callback();
+      }
     });
 };
 
@@ -93,11 +95,3 @@ _extractTastyCode=function(fileLinesArray){
     return instructions;
 
 };
-
-//    console.log("instructions ->"+ instructions[currentInstruction].parameters);
-//    instructions[currentInstruction].codeLines.map(function(value){
-//                console.log("value ->"+value);
-//        });
-//        for (var key in instructions) {
-//        console.log("key ->"+key);
-//        }

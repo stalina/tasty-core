@@ -1,10 +1,12 @@
-var engine = require('tasty-engine.js');
-var analyser = require('tasty-analyser.js');
+var engine = require('./tasty-engine.js');
+var analyser = require('./tasty-analyser.js');
 
-//initialise common instruction once for all
-analyser.addPluginFile('./plugin/common-instructions.conf.tty');
-    
 module.exports = {
+    //initialise common instruction once for all
+    loadAnalyser(onAnalyserReady){
+        analyser.addPluginFile('./plugin/common-instructions.conf.tty', onAnalyserReady);
+    },
+    
     init(browser) {
         engine.init(browser);
     },
