@@ -14,6 +14,7 @@
   "devDependencies": {
     "npm": "^3.9.0",
     "gulp": "^3.9.1",
-    "gulp-jasmine": "^2.3.0"
+    "gulp-jasmine": "^2.3.0",
+    "mock-require": "^1.3.0"
   }
 }

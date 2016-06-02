@@ -3,7 +3,7 @@ var analyser = require('../../app/tasty-analyser.js');
 describe("Tasty Analyser", function() {
 
     beforeAll(function(done) {
-        analyser.addPluginFile('./plugin/common-instructions.tty', done);
+        analyser.addPluginFile('./plugin/common-instructions.conf.tty', done);
     });
 
 

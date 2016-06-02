@@ -11,11 +11,6 @@ module.exports = {
         driver.quit();
     },
     execute(codeToExecute) {
-        try {
-            eval(codeToExecute);
-        }
-        catch (exception) {
-            console.log(exception.message);
-        }
+        eval(codeToExecute);
     }
 };
