@@ -10,7 +10,6 @@ gulp.task('codacy', function sendToCodacy() {
     .pipe(codacy({
       token: 'dfb4448a1ade4ca095025658aa77b8e2'
     }));
-  ;
 });
 
 //prepare file for coverage
