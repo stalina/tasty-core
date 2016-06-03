@@ -1,6 +1,17 @@
 const gulp = require('gulp');
 const jasmine = require('gulp-jasmine');
 const istanbul = require('gulp-istanbul');
+const codacy = require('gulp-codacy');
+
+//task for codacy coverage integration
+gulp.task('codacy', function sendToCodacy() {
+  return gulp
+    .src(['coverage/lcov.info'])
+    .pipe(codacy({
+      token: 'dfb4448a1ade4ca095025658aa77b8e2'
+    }));
+  ;
+});
 
 //prepare file for coverage
 gulp.task('pre-test', function () {
@@ -19,7 +30,9 @@ gulp.task('pre-test', function () {
         gulp.src('spec/it/**/*.spec.js').pipe(jasmine());
     });
 
-gulp.task('default', ['test','it']);
+gulp.task('default', ['test','it', 'codacy']);
+
+
 
 
 
