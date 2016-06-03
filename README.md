@@ -23,12 +23,9 @@ OPTIONAL, you can do the same with the chrome driver (in case you want to run te
 `ln -s <path to tasty-code>/node_modules/chromedriver/bin/chromedriver /usr/bin/chromedriver`
 
 ## Run 
-###Tests
-`gulp test`
-### Integration Tests
-`gulp it`
-### Everything
-`gulp`
+* Tests: `gulp test`
+* Integration Tests : `gulp it`
+* Everything : `gulp`
 
 ## Developpers information
 See wiki : https://github.com/stalina/tasty-core/wiki
