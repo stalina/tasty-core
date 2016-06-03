@@ -7,6 +7,9 @@ Core of the tasty test framework : test made Natural
 
 NodeJs is installed  (V5 +)
 
+## Getting Started
+TODO
+
 ## Install
 
 `cd tasty-code`
@@ -30,3 +33,20 @@ OPTIONAL, you can do the same with the chrome driver (in case you want to run te
 ## Run everything
 
 `gulp`
+
+## Developpers information
+See wiki : https://github.com/stalina/tasty-core/wiki
+
+## File naming convention
+
+### tasty script file
+Tasty script files can contain either tasty instruction defined in conf file or raw selenium-driver (javascript) code line.  
+Extension that should be used : `.tty`
+
+### tasty instruction file
+Tasty instruction files contains custom intruction written either with already defined tasty instruction or raw selenium-driver (javascript) code line.  
+Extension that should be used : `.conf.tty`
+
+### tasty parameter file
+Tasty parameters file contains couples of key/value (as a property file).  
+Extension that should be used : `.param.tty`
