@@ -1,7 +1,8 @@
-//assert for assertions in the tests
-var assert = require('assert');
 var webdriver = require('selenium-webdriver');
+//By for selectors in the tasty tests script
 var By = webdriver.By;
+//assert for assertions in the tasty tests script
+var assert = require('assert');
 var driver;
 
 module.exports = {

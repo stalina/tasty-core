@@ -5,24 +5,23 @@ var fs = require("fs");
  * its is mapped by the full instruction line
  * example :
  *{
- *     'my instructions with $oneParame or $moreParameters' : {
- *        parameters : [ '$oneParame', '$moreParameters'],
+ *     "my instructions with $oneParame or $moreParameters" : {
+ *        parameters : [ "$oneParame", "$moreParameters"],
+ *        regexMatcher : "my instructions with (.*) or (.*)"
  *        codeLines : [
- *            'driver.doSomething(),
- *            'myOtherCustom instruction $oneParam',
- *            'driver.doSomethingElse($moreParameters)'
+ *            "driver.doSomething(),
+ *            "myOtherCustom instruction $oneParam",
+ *            "driver.doSomethingElse($moreParameters)"
  *        ]
  *    }
  *  }
  */
 var tastyCode = [];
 
-exports.addPluginFile = function (filePath, callback) {
-    fs.readFile(filePath, 'utf8', function (err, data) {
-      if (err) {
-        console.log(err);
-      } else {
-        tastyCode = _extractTastyCode(data.split('\n'));
+exports.addPluginFile = function addPluginFile (filePath, callback) {
+    fs.readFile(filePath, "utf8", function (err, data) {
+      if (!err) {
+        tastyCode = _extractTastyCode(data.split("\n"));
       }
       if (callback){
         return callback();
@@ -30,42 +29,44 @@ exports.addPluginFile = function (filePath, callback) {
     });
 };
 
-exports.getTastyCode = function () {
+exports.getTastyCode = function getTastyCode () {
     return tastyCode;
 };
 
-exports.toSeleniumCode = function (tastyScriptLinesArray) {
+exports.toSeleniumCode = function toSeleniumCode (tastyScriptLinesArray) {
     var seleniumCode = [];
     for (var i=0;i<tastyScriptLinesArray.length;i++) {
         var tastyLine = tastyScriptLinesArray[i].trim();
         seleniumCode = seleniumCode.concat( _getSeleniumCodeFrom(tastyLine));
     }
-    return seleniumCode.join('\n');
+    return seleniumCode.join("\n");
 };
 
-_getSeleniumCodeFrom = function (tastyLine) {
+function _getSeleniumCodeFrom (tastyLine) {
     for (var instruction in tastyCode) {
-        var isMatching = tastyLine.match(new RegExp(tastyCode[instruction].regexMatcher));
-        if (isMatching) {
-            var seleniumCode = [];
-            var codeLines = tastyCode[instruction].codeLines;
-            for (var i=0;i<codeLines.length;i++) {
-               var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
-               seleniumCode.push(codeLine);
+        if (tastyCode.hasOwnProperty(instruction)) {
+            var isMatching = tastyLine.match(new RegExp(tastyCode[instruction].regexMatcher));
+            if (isMatching) {
+                var seleniumCode = [];
+                var codeLines = tastyCode[instruction].codeLines;
+                for (var i=0;i<codeLines.length;i++) {
+                var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
+                seleniumCode.push(codeLine);
+                }
+                return seleniumCode;
             }
-            return seleniumCode;
         }
     }
 };
 
-_replaceTastyParameters = function (codeLine, parametersArray, matcherArray) {
+function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
     for (var i=0;i<parametersArray.length;i++) {
         codeLine = codeLine.replace(parametersArray[i], "'"+matcherArray[i+1]+"'");
     }
     return codeLine;
 };
 
-_extractTastyCode=function(fileLinesArray){
+function _extractTastyCode (fileLinesArray){
     var instructions = [];
 
     var currentInstruction;
@@ -76,21 +77,20 @@ _extractTastyCode=function(fileLinesArray){
     for (var i=0;i<fileLinesArray.length;i++) {
         var line = fileLinesArray[i].trim();
 
-        if (line.endsWith('*{')) {
+        if (line.endsWith("*{")) {
             currentInstruction = line.substring(0, line.length-2).trim();
             currentParameters = currentInstruction.match(/\$\w*/gi);
-            currentRegexMatcher = '^' + currentInstruction.replace(new RegExp('\\'+currentParameters.join('|\\'), 'g'), '(.*)');
+            currentRegexMatcher = "^" + currentInstruction.replace(new RegExp("\\"+currentParameters.join("|\\"), "g"), "(.*)");
             currentCodeLines = [];
-        } else if (line.startsWith('}*')) {
+        } else if (line.startsWith("}*")) {
             instructions[currentInstruction] = {
-                'parameters' : currentParameters,
-                'codeLines'  : currentCodeLines,
-                'regexMatcher'  : currentRegexMatcher
+                "parameters" : currentParameters,
+                "codeLines"  : currentCodeLines,
+                "regexMatcher"  : currentRegexMatcher
             };
         } else if (line) {
             currentCodeLines.push(line);
         }
     }
     return instructions;
-
 };

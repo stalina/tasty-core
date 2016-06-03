@@ -15,7 +15,8 @@ module.exports = {
     },
     execute(tastyCode) {
         try {
-            var seleniumCode = analyser.toSeleniumCode(tastyCode.split('\n'))
+            var seleniumCode = analyser.toSeleniumCode(tastyCode.split('\n'));
+            
             engine.execute(seleniumCode);
         }
         catch (exception) {
