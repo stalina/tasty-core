@@ -22,22 +22,19 @@ PhantomJs binary needs to be in your PATH, for this purpose, you can add symboli
 OPTIONAL, you can do the same with the chrome driver (in case you want to run test in Chrome) : <br/>
 `ln -s <path to tasty-code>/node_modules/chromedriver/bin/chromedriver /usr/bin/chromedriver`
 
-## Run Tests
-
+## Run 
+###Tests
 `gulp test`
-
-## Run Integration Tests
-
+### Integration Tests
 `gulp it`
-
-## Run everything
-
+### Everything
 `gulp`
 
 ## Developpers information
 See wiki : https://github.com/stalina/tasty-core/wiki
 
 ## File naming convention
+These are the extension that we advice to use but for your own need, you can use any extension you need.
 
 ### tasty script file
 Tasty script files can contain either tasty instruction defined in conf file or raw selenium-driver (javascript) code line.  
