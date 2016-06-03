@@ -22,9 +22,9 @@ describe("Tasty Analyser", function() {
 
     it("Translate tasty code to selenium code - verify", function() {
         var toSeleniumCode = analyser.toSeleniumCode(['verify that myField is myValue']);
-        expect(toSeleniumCode).toBe("var element = driver.findElement(By.name('myField'));\n"+
+        expect(toSeleniumCode).toBe("var element = driver.findElement(By.css('.'+'myField'));\n"+
                                     "element.getText().then(function(text) {\n"+
-                                    "expect(text).toBe('myValue');\n"+
+                                    "assert.equal(text, 'myValue', 'the '+ 'myField' + ' element contains '+text);\n"+
                                     "});");
     });
 });
