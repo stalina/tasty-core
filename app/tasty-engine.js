@@ -1,25 +1,29 @@
 "use strict";
 
-let webdriver = require("selenium-webdriver"),
+// assert for assertions in the tasty tests script
+const assert = require("assert"),
+    webdriver = require("selenium-webdriver");
 
-
-    driver;
+    
+let driver;
 
 module.exports = {
-    init(browser) {
+    init (browser) {
+        
         driver = new webdriver.Builder().forBrowser(browser).build();
     },
     getDriver () {
+        
         return driver;
     },
-    stop() {
+    stop () {
+        
         driver.quit();
     },
-    execute(codeToExecute) {
+    execute (codeToExecute) {
+        
         // By for selectors in the tasty tests script
-        var By = webdriver.By,
-        // assert for assertions in the tasty tests script
-        assert = require("assert");
+        let By = webdriver.By;   
         
         eval(codeToExecute);
     }
