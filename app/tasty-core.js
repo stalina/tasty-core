@@ -1,10 +1,12 @@
-var engine = require('./tasty-engine.js');
-var analyser = require('./tasty-analyser.js');
+"use strict";
+
+var engine = require("./tasty-engine.js");
+var analyser = require("./tasty-analyser.js");
 
 module.exports = {
     //initialise common instruction once for all
     loadAnalyser(onAnalyserReady){
-        analyser.addPluginFile('./plugin/common-instructions.conf.tty', onAnalyserReady);
+        analyser.addPluginFile("./plugin/common-instructions.conf.tty", onAnalyserReady);
     },
     
     init(browser) {
@@ -15,7 +17,7 @@ module.exports = {
     },
     execute(tastyCode) {
         try {
-            var seleniumCode = analyser.toSeleniumCode(tastyCode.split('\n'));
+            var seleniumCode = analyser.toSeleniumCode(tastyCode.split("\n"));
             
             engine.execute(seleniumCode);
         }

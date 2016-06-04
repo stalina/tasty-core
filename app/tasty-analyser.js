@@ -1,3 +1,5 @@
+"use strict";
+
 // fs is to manage file from the fileSystem
 var fs = require("fs");
 /**
