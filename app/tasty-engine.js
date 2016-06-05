@@ -4,21 +4,23 @@
 const assert = require("assert"),
     webdriver = require("selenium-webdriver");
 
-    
 let driver;
 
 module.exports = {
     init (browser) {
         
         driver = new webdriver.Builder().forBrowser(browser).build();
+        
     },
     getDriver () {
         
         return driver;
+        
     },
     stop () {
         
         driver.quit();
+        
     },
     execute (codeToExecute) {
         
@@ -26,5 +28,6 @@ module.exports = {
         let By = webdriver.By;   
         
         eval(codeToExecute);
+        
     }
 };
