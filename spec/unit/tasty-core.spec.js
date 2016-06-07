@@ -6,8 +6,15 @@ var core;
 describe("Tasty Core Engine", function() {
     
     beforeAll(function() {
-        mock('../../app/tasty-analyser.js', { addPluginFile: function(file) { }});
-        mock('../../app/tasty-engine.js', { init: function(browser) { }});
+        mock('../../app/tasty-analyser.js', { 
+            addPluginFile: function(file) { },
+            toSeleniumCode: function(tastyCode) { }
+        });
+        mock('../../app/tasty-engine.js', { 
+            init: function(browser) { },
+            stop: function() { },
+            execute: function(seleniumCode) { }
+        });
 
         engine = require('../../app/tasty-engine.js');
         analyser = require('../../app/tasty-analyser.js');
@@ -16,8 +23,10 @@ describe("Tasty Core Engine", function() {
 
     beforeEach(function() {
        spyOn(analyser, 'addPluginFile');
+       spyOn(analyser, "toSeleniumCode").and.returnValue('seleniumCode');
        spyOn(engine, 'init');
-
+       spyOn(engine, 'stop');
+       spyOn(engine, 'execute');
     });
 
     afterAll(function() {
@@ -35,5 +44,18 @@ describe("Tasty Core Engine", function() {
         core.init('firefox');
         
         expect(engine.init).toHaveBeenCalledWith('firefox');
+    });
+    
+    it(" stops the engine", function() {
+        core.stop();
+        
+        expect(engine.stop).toHaveBeenCalled();
+    });
+    
+    it(" translate and execute", function() {
+        core.execute('tastyCode');
+        
+        expect(analyser.toSeleniumCode).toHaveBeenCalledWith(['tastyCode']);
+        expect(engine.execute).toHaveBeenCalledWith('seleniumCode');
     });
 });
