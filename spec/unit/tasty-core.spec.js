@@ -1,25 +1,28 @@
 var mock = require('mock-require');
-mock('../../app/tasty-analyser.js', { addPluginFile: function(file) {
-  console.log('http.request called : '+file);
-}});
-mock('../../app/tasty-engine.js', { init: function(browser) {
-  console.log('http.request called : '+browser);
-}});
 
-var engine = require('../../app/tasty-engine.js');
-var analyser = require('../../app/tasty-analyser.js');
+var engine;
+var analyser;
 var core; 
 describe("Tasty Core Engine", function() {
+    
+    beforeAll(function() {
+        mock('../../app/tasty-analyser.js', { addPluginFile: function(file) { }});
+        mock('../../app/tasty-engine.js', { init: function(browser) { }});
+
+        engine = require('../../app/tasty-engine.js');
+        analyser = require('../../app/tasty-analyser.js');
+        core = require('../../app/tasty-core.js');
+    });
 
     beforeEach(function() {
        spyOn(analyser, 'addPluginFile');
        spyOn(engine, 'init');
 
-       core = require('../../app/tasty-core.js');
     });
 
     afterAll(function() {
         mock.stopAll();
+        mock.stop('../../app/tasty-engine.js');
     });
     
     it("will load plugin at construction", function() {

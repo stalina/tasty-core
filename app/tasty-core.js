@@ -22,7 +22,7 @@ module.exports = {
             engine.execute(seleniumCode);
         }
         catch (exception) {
-            console.log(exception.message);
+            console.error(exception.message);
         }
     }
 };

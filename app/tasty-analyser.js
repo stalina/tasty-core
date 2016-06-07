@@ -18,31 +18,26 @@ var fs = require("fs");
  *    }
  *  }
  */
+
 var tastyCode = [];
 
-exports.addPluginFile = function addPluginFile (filePath, callback) {
-    fs.readFile(filePath, "utf8", function (err, data) {
-      if (!err) {
-        tastyCode = _extractTastyCode(data.split("\n"));
-      }
-      if (callback){
-        return callback();
-      }
-    });
-};
-
-exports.getTastyCode = function getTastyCode () {
-    return tastyCode;
-};
-
-exports.toSeleniumCode = function toSeleniumCode (tastyScriptLinesArray) {
-    var seleniumCode = [];
-    for (var i=0;i<tastyScriptLinesArray.length;i++) {
-        var tastyLine = tastyScriptLinesArray[i].trim();
-        seleniumCode = seleniumCode.concat( _getSeleniumCodeFrom(tastyLine));
+////utility methods
+function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
+    for (var i=0;i<parametersArray.length;i++) {
+        codeLine = codeLine.replace(parametersArray[i], "'"+matcherArray[i+1]+"'");
     }
-    return seleniumCode.join("\n");
-};
+    return codeLine;
+}
+
+function _extractSeleniumCode (instruction, isMatching){
+    var seleniumCode = [];
+    var codeLines = tastyCode[instruction].codeLines;
+    for (var i=0;i<codeLines.length;i++) {
+        var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
+        seleniumCode.push(codeLine);
+    }
+    return seleniumCode;
+}
 
 function _getSeleniumCodeFrom (tastyLine) {
     for (var instruction in tastyCode) {
@@ -52,21 +47,14 @@ function _getSeleniumCodeFrom (tastyLine) {
                 var seleniumCode = [];
                 var codeLines = tastyCode[instruction].codeLines;
                 for (var i=0;i<codeLines.length;i++) {
-                var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
-                seleniumCode.push(codeLine);
+                    var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
+                    seleniumCode.push(codeLine);
                 }
-                return seleniumCode;
+                return _extractSeleniumCode(instruction, isMatching);
             }
         }
     }
-};
-
-function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
-    for (var i=0;i<parametersArray.length;i++) {
-        codeLine = codeLine.replace(parametersArray[i], "'"+matcherArray[i+1]+"'");
-    }
-    return codeLine;
-};
+}
 
 function _extractTastyCode (fileLinesArray){
     var instructions = [];
@@ -95,4 +83,29 @@ function _extractTastyCode (fileLinesArray){
         }
     }
     return instructions;
+}
+////END of utility methods
+
+exports.addPluginFile = function addPluginFile (filePath, callback) {
+    fs.readFile(filePath, "utf8", function (err, data) {
+      if (!err) {
+        tastyCode = _extractTastyCode(data.split("\n"));
+      }
+      if (callback){
+        return callback();
+      }
+    });
+};
+
+exports.getTastyCode = function getTastyCode () {
+    return tastyCode;
+};
+
+exports.toSeleniumCode = function toSeleniumCode (tastyScriptLinesArray) {
+    var seleniumCode = [];
+    for (var i=0;i<tastyScriptLinesArray.length;i++) {
+        var tastyLine = tastyScriptLinesArray[i].trim();
+        seleniumCode = seleniumCode.concat( _getSeleniumCodeFrom(tastyLine));
+    }
+    return seleniumCode.join("\n");
 };
