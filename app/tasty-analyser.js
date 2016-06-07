@@ -44,12 +44,6 @@ function _getSeleniumCodeFrom (tastyLine) {
         if (tastyCode.hasOwnProperty(instruction)) {
             var isMatching = tastyLine.match(new RegExp(tastyCode[instruction].regexMatcher));
             if (isMatching) {
-                var seleniumCode = [];
-                var codeLines = tastyCode[instruction].codeLines;
-                for (var i=0;i<codeLines.length;i++) {
-                    var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
-                    seleniumCode.push(codeLine);
-                }
                 return _extractSeleniumCode(instruction, isMatching);
             }
         }
