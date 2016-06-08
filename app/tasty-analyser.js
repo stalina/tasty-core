@@ -2,6 +2,7 @@
 
 // fs is to manage file from the fileSystem
 var fs = require("fs");
+var PropertiesReader = require('properties-reader');
 /**
  * Tasty code will contains a map of instructions with their parameters and corresponding code line.
  * its is mapped by the full instruction line
@@ -20,6 +21,7 @@ var fs = require("fs");
  */
 
 var tastyCode = [];
+var properties = PropertiesReader();
 
 ////utility methods
 function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
@@ -78,6 +80,13 @@ function _extractTastyCode (fileLinesArray){
     }
     return instructions;
 }
+
+function _convertParamToValue(tastyLine){
+    properties.each((key, value) => {
+        tastyLine = tastyLine.replace(key, value);
+    });
+    return tastyLine;
+}
 ////END of utility methods
 
 exports.addPluginFile = function addPluginFile (filePath, callback) {
@@ -91,6 +100,10 @@ exports.addPluginFile = function addPluginFile (filePath, callback) {
     });
 };
 
+exports.addParamFile = function addParamFile (filePath) {
+    properties.append(filePath);
+};
+
 exports.getTastyCode = function getTastyCode () {
     return tastyCode;
 };
@@ -99,6 +112,7 @@ exports.toSeleniumCode = function toSeleniumCode (tastyScriptLinesArray) {
     var seleniumCode = [];
     for (var i=0;i<tastyScriptLinesArray.length;i++) {
         var tastyLine = tastyScriptLinesArray[i].trim();
+        tastyLine = _convertParamToValue(tastyLine);
         seleniumCode = seleniumCode.concat( _getSeleniumCodeFrom(tastyLine));
     }
     return seleniumCode.join("\n");

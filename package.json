@@ -22,7 +22,8 @@
     "phantomjs-prebuilt": "^2.1.7"
   },
   "dependencies": {
-    "selenium-webdriver": "^2.53.2",
-    "assert": "^1.4.1"
+    "assert": "^1.4.1",
+    "properties-reader": "0.0.15",
+    "selenium-webdriver": "^2.53.2"
   }
 }

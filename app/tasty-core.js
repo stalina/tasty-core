@@ -8,7 +8,9 @@ module.exports = {
     loadAnalyser(onAnalyserReady){
         analyser.addPluginFile("./plugin/common-instructions.conf.tty", onAnalyserReady);
     },
-    
+    addParamFile (filePath) {
+        analyser.addParamFile(filePath);
+    },
     init(browser) {
         engine.init(browser);
     },

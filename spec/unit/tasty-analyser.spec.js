@@ -4,6 +4,7 @@ describe("Tasty Analyser", function() {
 
     beforeAll(function(done) {
         analyser.addPluginFile('./plugin/common-instructions.conf.tty', done);
+        analyser.addParamFile('./spec/examples/my-parameters.param.tty');
     });
 
 
@@ -22,6 +23,14 @@ describe("Tasty Analyser", function() {
 
     it("Translate tasty code to selenium code - verify", function() {
         var toSeleniumCode = analyser.toSeleniumCode(['verify that myField is myValue']);
+        expect(toSeleniumCode).toBe("var element = driver.findElement(By.css('.'+'myField'));\n"+
+                                    "element.getText().then(function(text) {\n"+
+                                    "assert.equal(text, 'myValue', 'the '+ 'myField' + ' element contains '+text);\n"+
+                                    "});");
+    });
+    
+    it("Translate using parameters", function() {
+        var toSeleniumCode = analyser.toSeleniumCode(['verify that param.field is param.value']);
         expect(toSeleniumCode).toBe("var element = driver.findElement(By.css('.'+'myField'));\n"+
                                     "element.getText().then(function(text) {\n"+
                                     "assert.equal(text, 'myValue', 'the '+ 'myField' + ' element contains '+text);\n"+

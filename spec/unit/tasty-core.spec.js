@@ -8,6 +8,7 @@ describe("Tasty Core Engine", function() {
     beforeAll(function() {
         mock('../../app/tasty-analyser.js', { 
             addPluginFile: function(file) { },
+            addParamFile: function(file) { },
             toSeleniumCode: function(tastyCode) { }
         });
         mock('../../app/tasty-engine.js', { 
@@ -23,6 +24,7 @@ describe("Tasty Core Engine", function() {
 
     beforeEach(function() {
        spyOn(analyser, 'addPluginFile');
+       spyOn(analyser, 'addParamFile');
        spyOn(analyser, "toSeleniumCode").and.returnValue('seleniumCode');
        spyOn(engine, 'init');
        spyOn(engine, 'stop');
@@ -57,5 +59,11 @@ describe("Tasty Core Engine", function() {
         
         expect(analyser.toSeleniumCode).toHaveBeenCalledWith(['tastyCode']);
         expect(engine.execute).toHaveBeenCalledWith('seleniumCode');
+    });
+    
+     it(" adds param files", function() {
+        core.addParamFile('aFile');
+        
+        expect(analyser.addParamFile).toHaveBeenCalledWith('aFile');
     });
 });
