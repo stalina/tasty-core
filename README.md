@@ -1,5 +1,6 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e344b9e77d4f4dbca92ca6300df3dce7)](https://www.codacy.com/app/antoine-stalin/tasty-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stalina/tasty-core&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e344b9e77d4f4dbca92ca6300df3dce7)](https://www.codacy.com/app/antoine-stalin/tasty-core?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stalina/tasty-core&amp;utm_campaign=Badge_Coverage)
+[![Build Status](https://travis-ci.org/stalina/tasty-core.svg?branch=master)](https://travis-ci.org/stalina/tasty-core)
 
 # tasty-core
 Core of the tasty test framework : test made Natural
