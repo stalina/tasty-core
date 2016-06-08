@@ -2,7 +2,7 @@
 
 // fs is to manage file from the fileSystem
 var fs = require("fs");
-var PropertiesReader = require('properties-reader');
+var propertiesReader = require("properties-reader");
 /**
  * Tasty code will contains a map of instructions with their parameters and corresponding code line.
  * its is mapped by the full instruction line
@@ -21,7 +21,7 @@ var PropertiesReader = require('properties-reader');
  */
 
 var tastyCode = [];
-var properties = PropertiesReader();
+var properties = propertiesReader();
 
 ////utility methods
 function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
