@@ -1,0 +1,4 @@
+
+log some $value twice *{
+    console.log('log once '+$value+', and twice '+$value);
+}*

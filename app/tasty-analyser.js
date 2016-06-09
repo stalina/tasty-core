@@ -20,13 +20,13 @@ var propertiesReader = require("properties-reader");
  *  }
  */
 
-var tastyCode = [];
+var tastyCode = {};
 var properties = propertiesReader();
 
 ////utility methods
 function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
     for (var i=0;i<parametersArray.length;i++) {
-        codeLine = codeLine.replace(parametersArray[i], "'"+matcherArray[i+1]+"'");
+        codeLine = codeLine.split(parametersArray[i]).join("'"+matcherArray[i+1]+"'");
     }
     return codeLine;
 }
@@ -83,7 +83,7 @@ function _extractTastyCode (fileLinesArray){
 
 function _convertParamToValue(tastyLine){
     properties.each((key, value) => {
-        tastyLine = tastyLine.replace(key, value);
+        tastyLine = tastyLine.split(key).join(value);
     });
     return tastyLine;
 }
@@ -92,7 +92,10 @@ function _convertParamToValue(tastyLine){
 exports.addPluginFile = function addPluginFile (filePath, callback) {
     fs.readFile(filePath, "utf8", function (err, data) {
       if (!err) {
-        tastyCode = _extractTastyCode(data.split("\n"));
+          var tastyCodeToMerge = _extractTastyCode(data.split("\n"));
+          for (var key in tastyCodeToMerge) {
+              tastyCode[key] = tastyCodeToMerge[key];
+          }
       }
       if (callback){
         return callback();

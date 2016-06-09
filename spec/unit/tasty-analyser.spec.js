@@ -3,7 +3,10 @@ var analyser = require('../../app/tasty-analyser.js');
 describe("Tasty Analyser", function() {
 
     beforeAll(function(done) {
-        analyser.addPluginFile('./plugin/common-instructions.conf.tty', done);
+        analyser.addPluginFile('./plugin/common-instructions.conf.tty', function(){
+            analyser.addPluginFile('./spec/examples/test-instructions.conf.tty', done);
+        });
+        //analyser.addPluginFile('./spec/examples/test-instructions.conf.tty', done);
         analyser.addParamFile('./spec/examples/my-parameters.param.tty');
     });
 
@@ -36,4 +39,18 @@ describe("Tasty Analyser", function() {
                                     "assert.equal(text, 'myValue', 'the '+ 'myField' + ' element contains '+text);\n"+
                                     "});");
     });
+    
+    it("manage multiple occurences of function parameters when translating", function() {
+        var toSeleniumCode = analyser.toSeleniumCode(['log some thisValue twice']);
+        expect(toSeleniumCode).toBe("console.log('log once '+'thisValue'+', and twice '+'thisValue');");
+    });
+    
+    it("manage multiple occurences of external parameters when translating", function() {
+        var toSeleniumCode = analyser.toSeleniumCode(['verify that param.field is param.field']);
+        expect(toSeleniumCode).toBe("var element = driver.findElement(By.css('.'+'myField'));\n"+
+                                    "element.getText().then(function(text) {\n"+
+                                    "assert.equal(text, 'myField', 'the '+ 'myField' + ' element contains '+text);\n"+
+                                    "});");
+    });
+    
 });
