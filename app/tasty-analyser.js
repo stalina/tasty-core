@@ -119,7 +119,6 @@ exports.addPluginFile = function addPluginFile (filePath, callback) {
           for (var key in tastyCodeToMerge) {
               tastyCode[key] = tastyCodeToMerge[key];
           }
-          console.log("-----tastyCode : "+JSON.stringify(tastyCode));
       }
       if (callback){
         return callback();
