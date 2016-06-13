@@ -51,8 +51,8 @@ function _isTastyLine (tastyLine) {
             var isMatching = tastyLine.match(new RegExp(tastyCode[instruction].regexMatcher));
             if (isMatching) {
                 return {
-                    "instruction" : instruction,
-                    "isMatching" : isMatching
+                    instruction,
+                    isMatching
                 };
             }
         }
