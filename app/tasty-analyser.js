@@ -25,30 +25,45 @@ var properties = propertiesReader();
 
 ////utility methods
 function _replaceTastyParameters (codeLine, parametersArray, matcherArray) {
-    for (var i=0;i<parametersArray.length;i++) {
-        codeLine = codeLine.split(parametersArray[i]).join("'"+matcherArray[i+1]+"'");
-    }
+    parametersArray.forEach(function(element, i) {
+        var joiner = matcherArray[i+1];
+        if(joiner && !joiner.startsWith("$")){
+            joiner = "'"+joiner+"'";
+        }
+        codeLine = codeLine.split(element).join(joiner);
+    });
     return codeLine;
 }
 
-function _extractSeleniumCode (instruction, isMatching){
+function _extractSeleniumCode (isMatchingInstruction){
     var seleniumCode = [];
-    var codeLines = tastyCode[instruction].codeLines;
+    var codeLines = tastyCode[isMatchingInstruction.instruction].codeLines;
     for (var i=0;i<codeLines.length;i++) {
-        var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[instruction].parameters ,isMatching);
+        var codeLine = _replaceTastyParameters(codeLines[i], tastyCode[isMatchingInstruction.instruction].parameters ,isMatchingInstruction.isMatching);
         seleniumCode.push(codeLine);
     }
     return seleniumCode;
 }
 
-function _getSeleniumCodeFrom (tastyLine) {
+function _isTastyLine (tastyLine) {
     for (var instruction in tastyCode) {
         if (tastyCode.hasOwnProperty(instruction)) {
             var isMatching = tastyLine.match(new RegExp(tastyCode[instruction].regexMatcher));
             if (isMatching) {
-                return _extractSeleniumCode(instruction, isMatching);
+                return {
+                    "instruction" : instruction,
+                    "isMatching" : isMatching
+                };
             }
         }
+    }
+    return;
+}
+
+function _getSeleniumCodeFrom (tastyLine) {
+    var isMatchingInstruction = _isTastyLine(tastyLine);
+    if (isMatchingInstruction) {
+        return _extractSeleniumCode(isMatchingInstruction);
     }
 }
 
@@ -66,16 +81,24 @@ function _extractTastyCode (fileLinesArray){
         if (line.endsWith("*{")) {
             currentInstruction = line.substring(0, line.length-2).trim();
             currentParameters = currentInstruction.match(/\$\w*/gi);
-            currentRegexMatcher = "^" + currentInstruction.replace(new RegExp("\\"+currentParameters.join("|\\"), "g"), "(.*)");
+            currentRegexMatcher = "^" + currentInstruction;
+            if(currentParameters){
+                currentRegexMatcher = "^" + currentInstruction.replace(new RegExp("\\"+currentParameters.join("|\\"), "g"), "(.*)");
+            }
             currentCodeLines = [];
         } else if (line.startsWith("}*")) {
             instructions[currentInstruction] = {
-                "parameters" : currentParameters,
+                "parameters" : [].concat(currentParameters),
                 "codeLines"  : currentCodeLines,
                 "regexMatcher"  : currentRegexMatcher
             };
         } else if (line) {
-            currentCodeLines.push(line);
+            var seleniumCode = _getSeleniumCodeFrom(line);
+            if (seleniumCode) {
+                currentCodeLines = currentCodeLines.concat(seleniumCode);
+            } else {
+                currentCodeLines.push(line);
+            }
         }
     }
     return instructions;
@@ -96,6 +119,7 @@ exports.addPluginFile = function addPluginFile (filePath, callback) {
           for (var key in tastyCodeToMerge) {
               tastyCode[key] = tastyCodeToMerge[key];
           }
+          console.log("-----tastyCode : "+JSON.stringify(tastyCode));
       }
       if (callback){
         return callback();

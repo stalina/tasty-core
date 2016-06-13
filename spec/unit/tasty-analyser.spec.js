@@ -52,5 +52,17 @@ describe("Tasty Analyser", function() {
                                     "assert.equal(text, 'myField', 'the '+ 'myField' + ' element contains '+text);\n"+
                                     "});");
     });
+
+    it("manages intructions that call other instruction", function() {
+        //see ./spec/examples/test-instructions.conf.tty
+        var toSeleniumCode = analyser.toSeleniumCode(['call go to google']);
+        expect(toSeleniumCode).toBe("driver.get('http://www.google.fr');");
+    });
+
+    it("manages intructions that call other instruction and parameters", function() {
+        //see ./spec/examples/test-instructions.conf.tty
+        var toSeleniumCode = analyser.toSeleniumCode(['call go to http://www.google.fr']);
+        expect(toSeleniumCode).toBe("driver.get('http://www.google.fr');");
+    });
     
 });
